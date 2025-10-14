@@ -13,6 +13,16 @@ This repository contains code and instructions for the project "Generalization i
 
 ___
 
+## ToDo
+- Remove everything but SiT and baseline (cnn or any NN)
+- Try to make the SiT smaller or use the SiTs (small)
+- Test to run this on the HuggingFace hub
+- Improve logging massively to track experiments
+- Add model export during training to not lose best model
+- Start Latex documentation (lots of sources to add, background of SiT, ...)
+
+---
+
 ## Original Task Description
 Train on subsets of generated levels and test on unseen ones to measure true generalization. Explore data augmentation
 and inductive biases that improve transfer.
@@ -56,12 +66,16 @@ source venv/bin/activate
 venv\Scripts\activate
 ```
 
-´´´bash
-# upgrade pip
-python -m pip install --upgrade pip
-
 ```bash
 pip install -r requirements_cpu.txt  --force-reinstall --no-cache-dir
+```
+
+___
+
+## Run
+
+```bash
+python train2.py --env_name starpilot --device_id 0 --seed 1 --use_sit True --choice 0  --run_name Siet --num_mini_batch 96  --ppo_epoch 2  --hidden_size 64   
 ```
 
 ___
