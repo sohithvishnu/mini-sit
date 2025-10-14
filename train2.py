@@ -12,6 +12,7 @@ from baselines.common.vec_env.vec_normalize import VecNormalize
 from baselines.common.vec_env.vec_remove_dict_obs import VecExtractDictObs
 from test import evaluate
 from ucb_rl2_meta import algo, utils
+from ucb_rl2_meta.algo.drac import DrAC
 from ucb_rl2_meta.arguments import parser
 from ucb_rl2_meta.envs import VecPyTorchProcgen
 from ucb_rl2_meta.model import Policy, Policy_Sit, AugCNN
@@ -68,7 +69,7 @@ def train(args):
     log_dir = os.path.expanduser(args.log_dir)
     utils.cleanup_log_dir(log_dir)
 
-    torch.set_num_threads(1)
+    # torch.set_num_threads(1)
     device = torch.device("cpu") #torch.device("cuda:0" if args.cuda else "cpu")
     print("-------  device: ", args.device_id, "------")
     #  = torch.device("cuda:" + str(args.device_id))
@@ -117,7 +118,7 @@ def train(args):
         aug_list = [aug_to_func[t](batch_size=batch_size)
                     for t in list(aug_to_func.keys())]
 
-        agent = algo.UCBDrAC(
+        agent = UCBDrAC(
             actor_critic,
             args.clip_param,
             args.ppo_epoch,
@@ -216,7 +217,7 @@ def train(args):
         # aug_func = aug_to_func[args.aug_type](batch_size=batch_size)
         aug_list = [aug_to_func[t](batch_size=batch_size)
                     for t in list(aug_to_func.keys())]
-        agent = algo.DrAC(
+        agent = DrAC(
             actor_critic,
             args.clip_param,
             args.ppo_epoch,
