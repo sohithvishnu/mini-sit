@@ -4,7 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from ucb_rl2_meta.Siet import Siet
-from ucb_rl2_meta.SietTiny import SietTiny
 from ucb_rl2_meta.distributions import Categorical
 from ucb_rl2_meta.utils import init
 
@@ -506,9 +505,7 @@ class SiTBase(NNBase):
             self.encoder_obs = Siet(img_size=64, action_dim=15, depth=2, in_chans=3, patch_size=8,
                                     embed_dim=hidden_size, num_heads=8)
         else:
-            print("error - not implemented")
-            self.encoder_obs = SietTiny(img_size=64, patch_size=8, patch_size_local=8, in_chans=3, embed_dim=32, depth=1,
-                 num_heads=8, mlp_ratio=4., qkv_bias=True, qk_scale=None)
+            raise NotImplementedError("SiT - Tiny is not implemented, use choice=0")
 
         self.train()
 

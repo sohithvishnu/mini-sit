@@ -15,11 +15,11 @@ ___
 
 ## ToDo
 - Remove everything but SiT and baseline (cnn or any NN)
-- Try to make the SiT smaller or use the SiTs (small)
+- Try to make the SiT smaller, training must become much faster
 - Test to run this on the HuggingFace hub
-- Improve logging massively to track experiments
-- Add model export during training to not lose best model
+- Improve logging massively to track experiments and results
 - Start Latex documentation (lots of sources to add, background of SiT, ...)
+- clean up code, remove unnecessary comments, make documentation nicer, ...
 
 ---
 
@@ -38,7 +38,7 @@ dropout, batch normalization) and analyze their impact.
 ___
 
 ## Prequisites
-- You need python 3.10.0 (**not** latest 3.10) otherwise procgen and gym will not run!
+- You need python 3.10 otherwise procgen and gym will not run!
 
 ___
 
