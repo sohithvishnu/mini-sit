@@ -16,10 +16,20 @@ ___
 ## ToDo
 - Remove everything but SiT and baseline (cnn or any NN)
 - Try to make the SiT smaller, training must become much faster
+- Try to replace SiT with a smaller equivariant architecture (e.g. G-CNN)
 - Test to run this on the HuggingFace hub
 - Improve logging massively to track experiments and results
 - Start Latex documentation (lots of sources to add, background of SiT, ...)
 - clean up code, remove unnecessary comments, make documentation nicer, ...
+
+Week 21.10.2025
+- all environments work on the invididual machines
+- Jan: starts report on latec
+- Sohit: SiT understand, read, cleanup, try to make it smaller
+- Luca: run in on hugging face && cleanup code, remove unused code, set default values we never change, only keep models and algos we plan to use
+- Zusan: Data augmentation method: edge filters, remove noise in the images, run them to be sure they work, think about very clever ones
+- Sandrin: intermediate report, create draft of project scope, goals, tasks, timeline
+
 
 ---
 
@@ -99,3 +109,18 @@ ArXiv preprint (2024), available at arXiv:2406:15025.
 - [Minigrid Repository](https://github.com/Farama-Foundation/Minigrid)
 - [Gym OpenAI](https://github.com/openai/gym)
 - [Rotation Equivariant Vision Transformers](https://github.com/matthias-weissenbacher/SiT)
+
+
+
+
+
+
+
+
+1) data is augmented by random shifts, rotations, and flips
+2) architecture is a symmetry-invariant vision transformer (SiT) that is equivariant to
+3) train on PPO variant (DrAco) that uses data augmentation
+
+0) new data augmentation techniques
+1) small Sit
+2) our own PPO implementation
