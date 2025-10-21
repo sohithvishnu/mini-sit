@@ -69,3 +69,72 @@ class VecPyTorchProcgen(VecEnvWrapper):
         obs = torch.from_numpy(obs).float().to(self.device) / 255.
         reward = torch.from_numpy(reward).unsqueeze(dim=1).float()
         return obs, reward, done, info
+
+import numpy as np
+
+# -----------------------------------------------------------------------------
+# Minimal VecExtractDictObs: extracts RGB frames from Procgen's dict obs
+# -----------------------------------------------------------------------------
+class VecExtractDictObs(VecEnvWrapper):
+    def __init__(self, venv, key="rgb"):
+        super(VecExtractDictObs, self).__init__(venv)
+        self.key = key
+        self.observation_space = venv.observation_space.spaces[key]
+
+    def reset(self):
+        obs = self.venv.reset()
+        return obs[self.key]
+
+    def step_wait(self):
+        obs, rewards, dones, infos = self.venv.step_wait()
+        return obs[self.key], rewards, dones, infos
+
+
+# -----------------------------------------------------------------------------
+# Minimal VecMonitor: track rewards for logging
+# -----------------------------------------------------------------------------
+class VecMonitor(VecEnvWrapper):
+    def __init__(self, venv, filename=None, keep_buf=100):
+        super(VecMonitor, self).__init__(venv)
+        self.rewards = np.zeros(venv.num_envs, dtype=np.float32)
+        self.episode_returns = []
+        self.keep_buf = keep_buf
+
+    def reset(self):
+        obs = self.venv.reset()
+        self.rewards.fill(0)
+        return obs
+
+    def step_wait(self):
+        obs, rewards, dones, infos = self.venv.step_wait()
+        self.rewards += rewards
+        for i, done in enumerate(dones):
+            if done:
+                ep_info = {"episode": {"r": self.rewards[i].item()}}
+                infos[i].update(ep_info)
+                self.episode_returns.append(self.rewards[i])
+                self.rewards[i] = 0
+                if len(self.episode_returns) > self.keep_buf:
+                    self.episode_returns.pop(0)
+        return obs, rewards, dones, infos
+
+
+# -----------------------------------------------------------------------------
+# Minimal VecNormalize: normalize rewards (no obs normalization)
+# -----------------------------------------------------------------------------
+class VecNormalize(VecEnvWrapper):
+    def __init__(self, venv, ob=True, ret=True, cliprew=10.0):
+        super(VecNormalize, self).__init__(venv)
+        self.ret = ret
+        self.cliprew = cliprew
+        self.ret_rms = np.zeros(1)
+
+    def reset(self):
+        obs = self.venv.reset()
+        return obs
+
+    def step_wait(self):
+        obs, rews, dones, infos = self.venv.step_wait()
+        if self.ret:
+            rews = np.clip(rews, -self.cliprew, self.cliprew)
+        return obs, rews, dones, infos
