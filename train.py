@@ -152,14 +152,7 @@ def train(args):
             logger.logkv("update", j)
             logger.logkv("mean_reward", mean_r)
             logger.dumpkvs()
-
-
-        # ---- Logging ----
-        if j % args.log_interval == 0 and len(episode_rewards) > 1:
-            print(f"[Update {j}] Mean reward: {np.mean(episode_rewards):.2f}")
-            logger.logkv("mean_reward", np.mean(episode_rewards))
-            logger.dumpkvs()
-
+            
         # ---- Save checkpoint ----
         if j % args.save_interval == 0:
             save_path = os.path.join(args.save_dir, f"agent-{args.env_name}-step{j}.pt")
