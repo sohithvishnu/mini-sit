@@ -5,9 +5,9 @@
 # =============================================
 
 # ---------- CONFIG ----------
-ENV_NAME="coinrun"
+ENV_NAME="fruitbot"
 DEVICE_ID=0
-TOTAL_STEPS=50000000          # 50M frames total (adjust as needed)
+TOTAL_STEPS=25000000          # 50M frames total (adjust as needed)
 SAVE_DIR="./checkpoints"
 LOG_DIR="./logs"
 RUN_NAME="mini-sit-progressive"
