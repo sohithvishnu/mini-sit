@@ -84,16 +84,29 @@ def train():
                 env_name=ENV_NAME)
 
     # ---------------- Transfer Learning / Resume ----------------
+# ---------------- Transfer Learning / Resume ----------------
     resume_ckpt = "./checkpoints/agent-fruitbot-update11000.pt"
-    print(f"♻️ Loading encoder only from {resume_ckpt}")
-    state_dict = torch.load(resume_ckpt, map_location=dev)
-    model_dict = actor_critic.state_dict()
 
-    # keep encoder.* only
-    pretrained = {k: v for k, v in state_dict.items() if k.startswith("encoder.")}
-    model_dict.update(pretrained)
-    actor_critic.load_state_dict(model_dict)
-    print("🔄 Encoder restored, policy/value heads reinitialized.")
+    if os.path.exists(resume_ckpt):
+        print(f"♻️ Loading encoder only from {resume_ckpt}")
+        try:
+            # Load checkpoint
+            state_dict = torch.load(resume_ckpt, map_location=dev)
+            model_dict = actor_critic.state_dict()
+
+            # Keep only encoder weights
+            pretrained = {k: v for k, v in state_dict.items() if k.startswith("encoder.")}
+            model_dict.update(pretrained)
+
+            # Load updated dict
+            actor_critic.load_state_dict(model_dict)
+            print("🔄 Encoder restored successfully; policy/value heads reinitialized.")
+        except Exception as e:
+            print(f"⚠️ Failed to load encoder from {resume_ckpt}: {e}")
+            print("🚀 Proceeding with fresh initialization.")
+    else:
+        print("🧠 No encoder checkpoint found — starting new model from scratch.")
+
 
 
     # ---------------- Training Loop ----------------
